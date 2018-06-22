@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fio>
+    <excelModules>
+        <!--物料采购订单
+        大项目编号	订单号	物料供应商	供应商协议号	运保费率	总金额	含运保费总金额	收货地址	收货人	收货人电话	采购人	采购日期	 备注	物料签收日期	卖方合同号
+        -->
+        <excelModule id="cpn_purchase_order">
+            <insertTable table="cpn_purchase_order">
+                <mapping>
+                    <excel type="ref" columnIndex="0" table="cpn_project" field="projectNum" result="projectId"/>
+                    <targetColumn field="projectId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="1"/>
+                    <targetColumn field="orderNum"/>
+                </mapping>
+                <mapping>
+                    <excel type="ref" columnIndex="2" table="cpn_supplier" field="supplierName" result="supplierId"/>
+                    <targetColumn field="supplierId" jdbcType="Integer" />
+                </mapping>
+                <!--<mapping>
+                    <excel type="ref" columnIndex="3" table="cpn_supplier_protocol" field="protocolNum" result="id"/>
+                    <targetColumn field="protocolId"/>
+                </mapping>-->
+                <mapping>
+                    <excel type="in" columnIndex="4"/>
+                    <targetColumn field="deliverInsuranceRate"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="5"/>
+                    <targetColumn field="amount"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="6"/>
+                    <targetColumn field="exAmount"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="7"/>
+                    <targetColumn field="receiverAddress"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="8"/>
+                    <targetColumn field="contacts"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="9"/>
+                    <targetColumn field="contactsTel"/>
+                </mapping>
+                <mapping>
+                    <excel type="ref" columnIndex="10" table="cpn_user" field="realName" result="userId"/>
+                    <targetColumn field="creator"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="11"/>
+                    <targetColumn field="createDate" jdbcType="date" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="12"/>
+                    <targetColumn field="remark"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="13"/>
+                    <targetColumn field="receiveDate" jdbcType="date" />
+                </mapping>
+                <mapping>
+                    <excel type="default" value="2"/>
+                    <targetColumn field="status" jdbcType="integer" />
+                </mapping>
+            </insertTable>
+        </excelModule>
+
+        <excelModule id="cpn_order_detail">
+            <insertTable table="cpn_order_detail">
+                <mapping>
+                    <excel type="ref" columnIndex="0" table="cpn_purchase_order" field="orderNum" result="orderId"/>
+                    <targetColumn field="orderId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="ref" columnIndex="1" table="cpn_material" field="materialNum" result="materialId"/>
+                    <targetColumn field="materialId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="2"/>
+                    <targetColumn field="quantity" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="3"/>
+                    <targetColumn field="receiveQuantity" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="4"/>
+                    <targetColumn field="price"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="5"/>
+                    <targetColumn field="receiveDate" jdbcType="date"/>
+                </mapping>
+            </insertTable>
+            <insertTable table="cpn_inventory">
+                <mapping>
+                    <excel type="ref" columnIndex="1" table="cpn_material" field="materialNum" result="materialId"/>
+                    <targetColumn field="materialId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="3"/>
+                    <targetColumn field="quantity" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="4"/>
+                    <targetColumn field="price"/>
+                </mapping>
+                <mapping>
+                    <excel type="ref" columnIndex="6" table="cpn_warehouse" field="code" result="id"/>
+                    <targetColumn field="warehouseId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="default" value="sysdate"/>
+                    <targetColumn field="createDate" jdbcType="date" />
+                </mapping>
+            </insertTable>
+        </excelModule>
+        <!--物料表-->
+        <excelModule id="cpn_material">
+            <insertTable table="cpn_material">
+                <mapping>
+                    <excel type="in" columnIndex="0"/>
+                    <targetColumn field="materialName"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="1"/>
+                    <targetColumn field="materialNum"/>
+                </mapping>
+                <mapping>
+                    <excel type="ref" columnIndex="2" table="cpn_materialtype" field="materialTypeName" result="materialTypeId"/>
+                    <targetColumn field="materialTypeId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="3"/>
+                    <targetColumn field="unit"/>
+                </mapping>
+            </insertTable>
+        </excelModule>
+
+        <excelModule id="cpn_materialtype">
+            <insertTable table="cpn_materialtype">
+                <mapping>
+                    <excel type="ref" columnIndex="0" table="cpn_materialbigtype" field="materialBigTypeName" result="id"/>
+                    <targetColumn field="materialBigTypeId" jdbcType="Integer" />
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="1"/>
+                    <targetColumn field="materialTypeName"/>
+                </mapping>
+            </insertTable>
+        </excelModule>
+        <!--服务供应商-->
+        <excelModule id="cpn_supplier">
+            <insertTable table="cpn_supplier">
+                <mapping>
+                    <excel type="in" columnIndex="0"/>
+                    <targetColumn field="supplierName" table="cpn_supplier"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="1"/>
+                    <targetColumn field="supplierType" table="cpn_supplier"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="2"/>
+                    <targetColumn field="contact" table="cpn_supplier"/>
+                </mapping>
+                <mapping>
+                    <excel type="in" columnIndex="3"/>
+                    <targetColumn field="contactPhone" table="cpn_supplier"/>
+                </mapping>
+            </insertTable>
+        </excelModule>
+    </excelModules>
+</fio>
